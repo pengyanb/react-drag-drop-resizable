@@ -207,7 +207,7 @@ const Resizable: FC<IResizableProps> = ({
           }}
           style={{
             position: "absolute",
-            zIndex: 2000,
+            zIndex: DefaultZIndex,
             ...getResizeEdgeStyleProps(resizeDirection),
           }}
         />

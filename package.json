@@ -2,7 +2,8 @@
   "name": "@implicitcast/react-drag-drop-resizable",
   "version": "1.0.0",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/types/index.d.ts",
+  "license": "MIT",
   "peerDependencies": {
     "react": ">16.0.0",
     "classnames": "",
@@ -10,10 +11,16 @@
     "@types/react": ""
   },
   "scripts": {
-    "build": "tsc",
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc",
+    "postbuild": "npm run copyrootfiles && npm run copytypefiles",
+    "copytypefiles": "copyfiles -u 1 ./src/types/*.d.ts dist",
+    "copyrootfiles": "copyfiles package.json package-lock.json README.md dist",
     "test": "react-scripts test",
     "storybook": "start-storybook -p 6006 -s public --no-dll",
-    "build-storybook": "build-storybook -s public --no-dll"
+    "build-storybook": "build-storybook -s public --no-dll",
+    "lint": "eslint './src/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint --fix './src/**/*.{js,jsx,ts,tsx}'"
   },
   "eslintConfig": {
     "extends": [
@@ -34,25 +41,32 @@
     ]
   },
   "devDependencies": {
-    "react-scripts": "4.0.0",
-    "typescript": "^4.0.5",
-    "web-vitals": "^0.2.4",
-    "@testing-library/jest-dom": "^5.11.5",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^12.19.3",
     "@babel/core": "^7.12.3",
     "@storybook/addon-actions": "^6.0.28",
     "@storybook/addon-essentials": "^6.0.28",
+    "@storybook/addon-knobs": "^6.0.28",
     "@storybook/addon-links": "^6.0.28",
     "@storybook/node-logger": "^6.0.28",
     "@storybook/preset-create-react-app": "^3.1.4",
     "@storybook/react": "^6.0.28",
+    "@testing-library/jest-dom": "^5.11.5",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/classnames": "^2.2.11",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^12.19.3",
     "babel-loader": "^8.1.0",
-    "react-is": "^17.0.1"
+    "copyfiles": "^2.4.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.2",
+    "react-is": "^17.0.1",
+    "react-scripts": "4.0.0",
+    "rimraf": "^3.0.2",
+    "storybook-readme": "^5.0.8",
+    "typescript": "^4.0.5",
+    "web-vitals": "^0.2.4"
   },
-  "dependencies": {
-    
-  }
+  "dependencies": {}
 }

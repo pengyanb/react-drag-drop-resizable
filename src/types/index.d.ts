@@ -1,3 +1,5 @@
+/// <reference path="../index.d.ts" />
+// @ts-ignore
 declare module "*.scss";
 
 type IResizeDirection = "n" | "s" | "w" | "e" | "nw" | "ne" | "sw" | "se";
