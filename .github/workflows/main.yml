@@ -13,9 +13,6 @@ jobs:
         with:
           node-version: "12"
 
-      - name: Set up git
-        run: apt update && apt upgrade -y && apt install -y git
-
       # - name: npm install
       #   run: |
       #     npm install
