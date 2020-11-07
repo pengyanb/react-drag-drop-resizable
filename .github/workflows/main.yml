@@ -5,8 +5,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # - name: Checkout repository
-      #   uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       # - name: Set up Node.js
       #   uses: actions/setup-node@v1
@@ -22,4 +22,4 @@ jobs:
       #     npm run build
 
       - name: npm versioning
-        uses: npm-versioning-action
+        uses: pengyanb/npm-versioning-action@v1
