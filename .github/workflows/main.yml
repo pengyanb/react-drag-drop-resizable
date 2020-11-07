@@ -24,7 +24,7 @@ jobs:
       - name: npm versioning
         id: npmVersioning
         uses: pengyanb/npm-versioning-action@v1
-          with: 
-            release-branch: "develop,feature/test"
+        with:
+          release-branch: "develop,feature/test"
       - name: dummy versioning usage
         run: echo "Generated version is ${{ steps.npmVersioning.outputs.version}}"
