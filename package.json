@@ -20,7 +20,8 @@
     "storybook": "start-storybook -p 6006 -s public --no-dll",
     "build-storybook": "build-storybook -s public --no-dll",
     "lint": "eslint './src/**/*.{js,jsx,ts,tsx}'",
-    "lint:fix": "eslint --fix './src/**/*.{js,jsx,ts,tsx}'"
+    "lint:fix": "eslint --fix './src/**/*.{js,jsx,ts,tsx}'",
+    "versioning": ""
   },
   "eslintConfig": {
     "extends": [

@@ -8,10 +8,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # - name: Set up Node.js
-      #   uses: actions/setup-node@v1
-      #   with:
-      #     node-version: "12"
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12"
+
+      - name: Set up git
+        run: apt-get update && apt-get upgrade -y && apt-get install -y git
 
       # - name: npm install
       #   run: |
@@ -25,6 +28,7 @@ jobs:
         id: npmVersioning
         uses: pengyanb/npm-versioning-action@v1
         with:
-          release-branch: "develop,feature/test"
+          release-branch: "master"
+
       - name: dummy versioning usage
         run: echo "Generated version is ${{ steps.npmVersioning.outputs.version}}"
