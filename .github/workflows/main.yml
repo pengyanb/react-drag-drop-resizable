@@ -26,4 +26,4 @@ jobs:
         uses: pengyanb/npm-versioning-action@v1
 
       - name: dummy versioning usage
-        run: echo "Generated version is \${{ steps.npmVersioning.outputs.version}}"
+        run: echo "Generated version is ${{ steps.npmVersioning.outputs.version}}"
