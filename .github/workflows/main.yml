@@ -26,9 +26,7 @@ jobs:
         uses: pengyanb/npm-versioning-action@v1
         with:
           release-branch: "master"
-
-      - name: set package.json version
-        run: npm run versioning -- ${{ steps.npmVersioning.outputs.version }} "./dist/package.json"
+          package-json-path: "./dist/package.json"
 
       - name: npm publish
         run: npm publish ./dist --tag ${{ steps.npmVersioning.outputs.tag }} --dry-run true
