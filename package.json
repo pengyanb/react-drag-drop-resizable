@@ -21,7 +21,7 @@
     "build-storybook": "build-storybook -s public --no-dll",
     "lint": "eslint './src/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "eslint --fix './src/**/*.{js,jsx,ts,tsx}'",
-    "versioning": ""
+    "versioning": "node ./utils/versioning.js"
   },
   "eslintConfig": {
     "extends": [

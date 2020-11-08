@@ -13,13 +13,13 @@ jobs:
         with:
           node-version: "12"
 
-      # - name: npm install
-      #   run: |
-      #     npm install
+      - name: npm install
+        run: |
+          npm install
 
-      # - name: npm run build
-      #   run: |
-      #     npm run build
+      - name: npm run build
+        run: |
+          npm run build
 
       - name: npm versioning
         id: npmVersioning
@@ -27,5 +27,14 @@ jobs:
         with:
           release-branch: "master"
 
-      - name: dummy versioning usage
-        run: echo "Generated version is ${{ steps.npmVersioning.outputs.version}}"
+      - name: set package.json version
+        run: npm run versioning -- ${{ steps.npmVersioning.outputs.version }} "./dist/package.json"
+
+      - name: npm publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_AUTH_TOKEN }}
+          package: "./dist/package.json"
+          tag: ${{ steps.npmVersioning.outputs.tag }}
+          check-version: false
+          dry-run: true
