@@ -30,8 +30,7 @@ jobs:
       - name: set package.json version
         run: npm run versioning -- ${{ steps.npmVersioning.outputs.version }} "./dist/package.json"
 
-      - env:
-        NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN  }}
-
       - name: npm publish
         run: npm publish ./dist --tag ${{ steps.npmVersioning.outputs.tag }} --dry-run true
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN  }}
