@@ -1,14 +1,11 @@
 {
   "name": "@implicitcast/react-drag-drop-resizable",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "license": "MIT",
   "peerDependencies": {
-    "react": ">16.0.0",
-    "classnames": "",
-    "@types/classnames": "",
-    "@types/react": ""
+    "react": ">16.0.0"
   },
   "scripts": {
     "clean": "rimraf dist",
@@ -60,6 +57,7 @@
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "node-sass": "^4.14.1",
     "prettier": "^2.1.2",
     "react-is": "^17.0.1",
     "react-scripts": "4.0.0",
