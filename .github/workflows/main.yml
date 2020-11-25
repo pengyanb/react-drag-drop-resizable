@@ -29,6 +29,6 @@ jobs:
           package-json-path: "./dist/package.json"
 
       - name: npm publish
-        run: npm publish ./dist --tag ${{ steps.npmVersioning.outputs.tag }} --dry-run true
+        run: npm publish ./dist --tag ${{ steps.npmVersioning.outputs.tag }}
         env:
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN  }}

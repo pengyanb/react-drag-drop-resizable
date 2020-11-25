@@ -62,7 +62,6 @@ const getDefaultDndViewStyle = (index: number) => {
     top: 20,
     // backgroundColor: "#" + Math.floor(Math.random() * 16777215).toString(16),
     textAlign: "center" as const,
-    color: "white",
     border: "1px solid #bfbfbf",
   };
 };
@@ -81,7 +80,6 @@ const DndCanvas: React.FC<IDndCanvas> = () => {
   }, [viewCount, context]);
 
   useEffect(() => {
-    console.log("!!!!!!!");
     addViewModal();
   }, []);
 
@@ -90,9 +88,8 @@ const DndCanvas: React.FC<IDndCanvas> = () => {
       <div
         style={{
           width: "100%",
-          height: 600,
+          height: "80vh",
           overflow: "auto",
-          backgroundColor: "#3E3E3E",
         }}
       >
         {context.dndSystemState.viewModalStructure.map((viewModal) =>

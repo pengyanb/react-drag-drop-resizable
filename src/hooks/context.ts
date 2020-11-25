@@ -1,35 +1,5 @@
 /* eslint-disable array-callback-return */
 import React, { useState } from "react";
-
-const utilViewModalCanDropFilter = (
-  viewModals: IDndViewModel[],
-  toViewModal: IDndViewModel | null | undefined
-) => {
-  if (toViewModal === undefined || toViewModal === null) {
-    return true;
-  } else {
-    const hasMatchedId = (
-      viewModals: IDndViewModel[],
-      toViewModal: IDndViewModel
-    ) => {
-      return viewModals.reduce((accumulator, viewModal) => {
-        if (accumulator) {
-          return accumulator;
-        }
-        if (viewModal.id === toViewModal.id) {
-          accumulator = true;
-        } else if (Array.isArray(viewModal.children)) {
-          if (hasMatchedId(viewModal.children, toViewModal)) {
-            accumulator = true;
-          }
-        }
-        return accumulator;
-      }, false);
-    };
-    return !hasMatchedId(viewModals, toViewModal);
-  }
-};
-
 export interface IDndSystemState {
   viewModalStructure: IDndViewModel[];
   draggingViewModels: IDndViewModel[];
@@ -43,6 +13,10 @@ export interface IDndSystemContext {
   dndDropHandler: (dropInfo: IDropInfo) => void;
   dndAddCanDropFilter: (canDropFilter: ICanDropFilter) => void;
   dndClearDropFilters: () => void;
+  dndFindParentViewModal: (
+    childViewModal: IDndViewModel | undefined | null,
+    fromViewModals: IDndViewModel[]
+  ) => IDndViewModel | null;
   dndAddViewModal: (
     viewModalToAdd: IDndViewModel,
     parentViewModal?: IDndViewModel
@@ -158,6 +132,39 @@ export const useInitialDndSystemContext: () => IDndSystemContext = () => {
     dropInfo: null,
   });
 
+  const utilViewModalCanDropFilter = (
+    viewModals: IDndViewModel[],
+    toViewModal: IDndViewModel | null | undefined
+  ) => {
+    if (toViewModal === undefined || toViewModal === null) {
+      return true;
+    } else {
+      const isInvalidTarget = (
+        viewModals: IDndViewModel[],
+        toViewModal: IDndViewModel
+      ) => {
+        return viewModals.reduce((accumulator, viewModal) => {
+          if (accumulator) {
+            return accumulator;
+          }
+          if (viewModal.id === toViewModal.id) {
+            accumulator = true;
+          } else if (
+            dndFindParentViewModal(viewModal, [toViewModal]) !== null
+          ) {
+            accumulator = true;
+          } else if (Array.isArray(viewModal.children)) {
+            if (isInvalidTarget(viewModal.children, toViewModal)) {
+              accumulator = true;
+            }
+          }
+          return accumulator;
+        }, false);
+      };
+      return !isInvalidTarget(viewModals, toViewModal);
+    }
+  };
+
   const dndAddViewModal = (
     viewModalToAdd: IDndViewModel,
     parentViewModal?: IDndViewModel
@@ -249,27 +256,82 @@ export const useInitialDndSystemContext: () => IDndSystemContext = () => {
 
   const dndDropHandler = (dropInfo: IDropInfo) => {
     console.log("!!!DropHandler: ", dropInfo);
-    const { viewModals, pos, toViewModal, mouseDownAtViewPos } = dropInfo;
-    const canDrop = canDropFilters.reduce(
-      (accumulator, filter) => filter(viewModals, toViewModal),
-      true
-    );
-    if (toViewModal && canDrop) {
+    const {
+      viewModals,
+      pos,
+      toViewModal,
+      mouseDownAtViewPos,
+      translation,
+    } = dropInfo;
+    if (!toViewModal) {
       viewModals.map((viewModalToDrop) => {
-        viewModalToDrop.style.left = mouseDownAtViewPos.x;
-        viewModalToDrop.style.top = mouseDownAtViewPos.y;
-        dndMoveViewModal(viewModalToDrop, toViewModal);
+        console.log("111111", viewModalToDrop.style, translation);
+        viewModalToDrop.style.left =
+          (viewModalToDrop.style.left as number) + translation.x;
+        viewModalToDrop.style.top =
+          (viewModalToDrop.style.top as number) + translation.y;
+        dndUpdateViewModal(viewModalToDrop);
+        // dndMoveViewModal(viewModalToDrop, toViewModal);
       });
     } else {
-      viewModals.map((viewModalToDrop) => {
-        if (viewModalToDrop.style) {
-          viewModalToDrop.style.left = pos.x;
-          viewModalToDrop.style.top = pos.y;
-          dndUpdateViewModal(viewModalToDrop);
-          dndMoveViewModal(viewModalToDrop);
-        }
-      });
+      const canDrop = canDropFilters.reduce(
+        (accumulator, filter) => accumulator && filter(viewModals, toViewModal),
+        true
+      );
+      if (canDrop) {
+        viewModals.map((viewModalToDrop) => {
+          console.log("222222", viewModalToDrop.style, mouseDownAtViewPos);
+          if (viewModalToDrop.style && toViewModal.viewRef) {
+            const boundingRect = toViewModal.viewRef.current!.getBoundingClientRect();
+            viewModalToDrop.style.left = pos.x - boundingRect.x;
+            viewModalToDrop.style.top = pos.y - boundingRect.y;
+            dndUpdateViewModal(viewModalToDrop);
+            dndMoveViewModal(viewModalToDrop, toViewModal);
+          }
+        });
+      } else {
+        viewModals.map((viewModalToDrop) => {
+          console.log("333333", viewModalToDrop.style, translation);
+          if (viewModalToDrop.style) {
+            viewModalToDrop.style.left =
+              (viewModalToDrop.style.left as number) + translation.x;
+            viewModalToDrop.style.top =
+              (viewModalToDrop.style.top as number) + translation.y;
+            dndUpdateViewModal(viewModalToDrop);
+          }
+        });
+      }
     }
+  };
+
+  const dndFindParentViewModal = (
+    childViewModal: IDndViewModel | undefined | null,
+    fromViewModals: IDndViewModel[]
+  ) => {
+    if (childViewModal === undefined || childViewModal === null) {
+      return null;
+    }
+    return fromViewModals.reduce<IDndViewModel | null>(
+      (accumulator, viewModal) => {
+        if (Array.isArray(viewModal.children)) {
+          viewModal.children.map((child) => {
+            if (child.id === childViewModal.id) {
+              accumulator = viewModal;
+            } else if (Array.isArray(child.children)) {
+              const result = dndFindParentViewModal(
+                childViewModal,
+                child.children
+              );
+              if (result) {
+                accumulator = result;
+              }
+            }
+          });
+        }
+        return accumulator;
+      },
+      null
+    );
   };
 
   return {
@@ -279,6 +341,7 @@ export const useInitialDndSystemContext: () => IDndSystemContext = () => {
     dndAddCanDropFilter: (canDropFilter: ICanDropFilter) =>
       canDropFilters.push(canDropFilter),
     dndClearDropFilters: () => canDropFilters.splice(0, canDropFilters.length),
+    dndFindParentViewModal,
     dndAddViewModal,
     dndRemoveViewModal,
     dndUpdateViewModal,
