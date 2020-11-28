@@ -22,8 +22,6 @@ jobs:
       - name: npm run build
         run: |
           npm run build
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN  }}
 
       - name: npm versioning
         id: npmVersioning
@@ -34,5 +32,3 @@ jobs:
 
       - name: npm publish
         run: npm publish ./dist --tag ${{ steps.npmVersioning.outputs.tag }} --access public
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN  }}
