@@ -16,10 +16,14 @@ jobs:
       - name: npm install
         run: |
           npm install
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN  }}
 
       - name: npm run build
         run: |
           npm run build
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN  }}
 
       - name: npm versioning
         id: npmVersioning
