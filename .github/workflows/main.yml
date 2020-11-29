@@ -41,3 +41,5 @@ jobs:
 
       - name: npm publish storybook to github package
         run: npm run deploy-storybook-gh
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN  }}
