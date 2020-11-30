@@ -40,6 +40,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN  }}
 
       - name: npm publish storybook to github package
-        run: npm run deploy-storybook-gh
+        run: npm run deploy-storybook-gh -- --ci
         env:
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN  }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
