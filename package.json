@@ -1,26 +1,30 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.11.5",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^12.19.3",
-    "@types/react": "^16.9.55",
-    "@types/react-dom": "^16.9.9",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-scripts": "4.0.0",
-    "typescript": "^4.0.5",
-    "web-vitals": "^0.2.4"
+  "name": "@implicitcast/react-drag-drop-resizable",
+  "version": "1.0.1",
+  "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pengyanb/web-component-wrapper"
+  },
+  "peerDependencies": {
+    "react": ">16.0.0",
+    "immer": ">8.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc",
+    "postbuild": "npm run copyrootfiles && npm run copytypefiles",
+    "copytypefiles": "copyfiles -u 1 ./src/types/*.d.ts dist",
+    "copyrootfiles": "copyfiles package.json package-lock.json README.md dist",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "deploy-storybook-gh": "storybook-to-ghpages --out=.out",
+    "deploy-storybook-s3": "storybook-to-aws-s3 --out=.out",
+    "lint": "eslint './src/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint --fix './src/**/*.{js,jsx,ts,tsx}'"
   },
   "eslintConfig": {
     "extends": [
@@ -39,5 +43,35 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@storybook/addon-actions": "^6.1.2",
+    "@storybook/addon-essentials": "^6.1.2",
+    "@storybook/addon-knobs": "^6.1.2",
+    "@storybook/addon-links": "^6.1.2",
+    "@storybook/node-logger": "^6.1.2",
+    "@storybook/preset-create-react-app": "^3.1.5",
+    "@storybook/react": "^6.1.2",
+    "@storybook/storybook-deployer": "^2.8.7",
+    "@testing-library/jest-dom": "^5.11.5",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/classnames": "^2.2.11",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^12.19.3",
+    "babel-loader": "^8.1.0",
+    "copyfiles": "^2.4.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "node-sass": "^4.14.1",
+    "prettier": "^2.1.2",
+    "react-is": "^17.0.1",
+    "react-scripts": "4.0.0",
+    "rimraf": "^3.0.2",
+    "storybook-readme": "^5.0.9",
+    "typescript": "^4.0.5",
+    "web-vitals": "^0.2.4"
   }
 }
