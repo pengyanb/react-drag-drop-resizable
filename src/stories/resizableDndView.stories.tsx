@@ -1,52 +1,60 @@
+/* eslint-disable import/no-anonymous-default-export */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
-import React, { useContext, useEffect, useState, useCallback } from "react";
-import ResizableDnDView from "../components/ResizableDnDView";
-import {
-  DndSystemContext,
-  useInitialDndSystemContext,
-  IDndSystemContext,
-} from "../hooks";
+import React, { useEffect, useState, useCallback } from "react";
+import RDnDView from "../components/RDnDView";
+import RDndCanvas from "../components/RDnDCanvas";
 
-const defaultExpost = {
+import { RDndSystemContext, useInitialRDndSystemContext } from "../hooks";
+
+export default {
   title: "Components/Resizable Drag and Drop View",
-  component: ResizableDnDView,
+  component: RDnDView,
+  parameters: {
+    docs: {
+      source: {
+        type: "code",
+      },
+    },
+  },
 };
 
-export default defaultExpost;
+interface IResizableDndViewExample {}
 
-const renderResizableDndView: (
-  viewModal: IDndViewModel,
-  context: IDndSystemContext
-) => any = (viewModal, context) => {
-  if (Array.isArray(viewModal.children) && viewModal.children.length > 0) {
-    return (
-      <ResizableDnDView
-        key={viewModal.id}
-        viewModal={viewModal}
-        style={viewModal.style}
-        resizeHandler={context.dndResizeHandler}
-        dropHandler={context.dndDropHandler}
+export const ResizableDndViewExample: React.FC<IResizableDndViewExample> = () => {
+  const rDndSystemContext = useInitialRDndSystemContext();
+  const [viewCount, setViewCount] = useState(0);
+
+  const addViewModal = useCallback(() => {
+    rDndSystemContext.dndAddViewModal({
+      id: `RDnDView${viewCount + 1}`,
+      style: getDefaultDndViewStyle(viewCount),
+      children: <span>{`RDnDView${viewCount + 1}`}</span>,
+    });
+    setViewCount(viewCount + 1);
+  }, [viewCount, rDndSystemContext]);
+
+  useEffect(() => {
+    addViewModal();
+  }, []);
+
+  return (
+    <RDndSystemContext.Provider value={rDndSystemContext}>
+      <RDndCanvas />
+      <button
+        style={{
+          position: "absolute",
+          bottom: 20,
+          height: 30,
+          width: 100,
+          zIndex: 3000,
+        }}
+        onClick={() => addViewModal()}
       >
-        {viewModal.id}
-        {viewModal.children.map((childViewModal) =>
-          renderResizableDndView(childViewModal, context)
-        )}
-      </ResizableDnDView>
-    );
-  } else {
-    return (
-      <ResizableDnDView
-        key={viewModal.id}
-        viewModal={viewModal}
-        style={viewModal.style}
-        resizeHandler={context.dndResizeHandler}
-        dropHandler={context.dndDropHandler}
-      >
-        {viewModal.id}
-      </ResizableDnDView>
-    );
-  }
+        Add View
+      </button>
+    </RDndSystemContext.Provider>
+  );
 };
 
 const getDefaultDndViewStyle = (index: number) => {
@@ -64,62 +72,4 @@ const getDefaultDndViewStyle = (index: number) => {
     textAlign: "center" as const,
     border: "1px solid #bfbfbf",
   };
-};
-
-interface IDndCanvas {}
-const DndCanvas: React.FC<IDndCanvas> = () => {
-  const context = useContext<IDndSystemContext>(DndSystemContext);
-  const [viewCount, setViewCount] = useState(0);
-
-  const addViewModal = useCallback(() => {
-    context.dndAddViewModal({
-      id: `dndView${viewCount + 1}`,
-      style: getDefaultDndViewStyle(viewCount),
-    });
-    setViewCount(viewCount + 1);
-  }, [viewCount, context]);
-
-  useEffect(() => {
-    addViewModal();
-  }, []);
-
-  return (
-    <>
-      <div
-        style={{
-          width: "100%",
-          height: "80vh",
-          overflow: "auto",
-        }}
-      >
-        {context.dndSystemState.viewModalStructure.map((viewModal) =>
-          renderResizableDndView(viewModal, context)
-        )}
-      </div>
-      <button
-        style={{
-          position: "absolute",
-          bottom: 20,
-          height: 30,
-          width: 100,
-          zIndex: 3000,
-        }}
-        onClick={() => addViewModal()}
-      >
-        Add View
-      </button>
-    </>
-  );
-};
-
-interface IResizableDndViewExample {}
-
-export const ResizableDndViewExample: React.FC<IResizableDndViewExample> = () => {
-  const initalDndSystemContext = useInitialDndSystemContext();
-
-  return (
-    <DndSystemContext.Provider value={initalDndSystemContext}>
-      <DndCanvas />
-    </DndSystemContext.Provider>
-  );
 };

@@ -4,8 +4,13 @@
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pengyanb/web-component-wrapper"
+  },
   "peerDependencies": {
-    "react": ">16.0.0"
+    "react": ">16.0.0",
+    "immer": ">8.0.0"
   },
   "scripts": {
     "clean": "rimraf dist",
@@ -68,6 +73,5 @@
     "storybook-readme": "^5.0.9",
     "typescript": "^4.0.5",
     "web-vitals": "^0.2.4"
-  },
-  "dependencies": {}
+  }
 }

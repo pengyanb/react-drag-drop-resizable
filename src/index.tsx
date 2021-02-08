@@ -1,1 +1,1 @@
-export * from "./components/ResizableDnDView";
+export * from "./components/RDnDView";

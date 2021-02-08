@@ -4,7 +4,7 @@ declare module "*.scss";
 
 type IResizeDirection = "n" | "s" | "w" | "e" | "nw" | "ne" | "sw" | "se";
 
-interface IDndViewModel {
+interface IRDndViewModel {
   id: string;
   style: React.CSSProperties;
   [key: string]: any;
@@ -17,11 +17,11 @@ interface I2DCoordinate {
 }
 
 interface IDropInfo {
-  viewModals: IDndViewModel[];
+  viewModals: IRDndViewModel[];
   pos: I2DCoordinate;
   translation: I2DCoordinate;
   mouseDownAtViewPos: I2DCoordinate;
-  toViewModal?: IDndViewModel | null;
+  toViewModal?: IRDndViewModel | null;
 }
 
 interface IResizeInfo {
@@ -33,17 +33,17 @@ interface IResizeInfo {
 }
 
 interface IDraggingInfo {
-  viewModals: IDndViewModel[];
+  viewModals: IRDndViewModel[];
   translation: I2DCoordinate;
 }
 
 type ICanDropFilter = (
-  viewModalsToDrop: IDndViewModel[],
-  toViewModal: IDndViewModel | undefined | null
+  viewModalsToDrop: IRDndViewModel[],
+  toViewModal: IRDndViewModel | undefined | null
 ) => boolean;
-interface IResizableDnDProps {
-  viewModal: IDndViewModel;
-  resizeHandler: (viewModal: IDndViewModel, resizeInfo: IResizeInfo) => void;
+interface IRDnDProps {
+  viewModal: IRDndViewModel;
+  resizeHandler: (viewModal: IRDndViewModel, resizeInfo: IResizeInfo) => void;
   dropHandler: (dropInfo: IDropInfo) => void;
   onDrag?: (draggingInfo: IDraggingInfo) => void;
   onDragEnd?: (dragEndInfo: IDragEndInfo) => void;
@@ -53,5 +53,11 @@ interface IResizableDnDProps {
   style?: React.CSSProperties;
   children?: React.ReactNode;
   refToForward?: (element: React.MutableRefObject<HTMLElement | null>) => void;
+  [key: string]: any;
+}
+
+interface IRDnDCanvasProps {
+  style?: React.CSSProperties;
+  children?: React.ReactNode;
   [key: string]: any;
 }

@@ -7,7 +7,7 @@ import React, {
   useLayoutEffect,
 } from "react";
 
-import { DndSystemContext } from "../../hooks/index";
+import { RDndSystemContext } from "../../hooks/index";
 import "./index.scss";
 
 const DefaultZIndex = 2000;
@@ -35,7 +35,7 @@ interface IResizeRef {
   height: string | number | undefined;
 }
 
-const ResizableDnDView: FC<IResizableDnDProps> = ({
+const RDnDView: FC<IRDnDProps> = ({
   viewModal,
   resizeHandler,
   resizeEdgeWidth = 6,
@@ -62,12 +62,12 @@ const ResizableDnDView: FC<IResizableDnDProps> = ({
   resizeRef.current.height = style.height || DefaultHeightStyle;
 
   const {
-    dndSystemState,
+    rDndSystemState,
     dndSetDropInfo,
     dndAddDraggingViewModal,
     dndRemoveAllDraggingViewModals,
     dndSetDropTargetViewModal,
-  } = useContext(DndSystemContext);
+  } = useContext(RDndSystemContext);
 
   const domRef = useRef<HTMLDivElement>(null);
   refToForward?.(domRef);
@@ -81,10 +81,10 @@ const ResizableDnDView: FC<IResizableDnDProps> = ({
     pos: DefaultPos,
   });
 
-  const viewModalRef = useRef<IDndViewModel>(viewModal);
+  const viewModalRef = useRef<IRDndViewModel>(viewModal);
   viewModalRef.current = viewModal;
-  const dndSystemStateRef = useRef(dndSystemState);
-  dndSystemStateRef.current = dndSystemState;
+  const dndSystemStateRef = useRef(rDndSystemState);
+  dndSystemStateRef.current = rDndSystemState;
 
   const [dragState, setDragState] = useState(dragRef.current);
 
@@ -610,4 +610,4 @@ const ResizableDnDView: FC<IResizableDnDProps> = ({
   }
 };
 
-export default ResizableDnDView;
+export default RDnDView;

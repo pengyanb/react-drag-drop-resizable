@@ -1,43 +1,43 @@
 /* eslint-disable array-callback-return */
 import React, { useState } from "react";
-export interface IDndSystemState {
-  viewModalStructure: IDndViewModel[];
-  draggingViewModels: IDndViewModel[];
-  dropTargetViewModal: IDndViewModel | null;
+export interface IRDndSystemState {
+  viewModalStructure: IRDndViewModel[];
+  draggingViewModels: IRDndViewModel[];
+  dropTargetViewModal: IRDndViewModel | null;
   dropInfo: IDropInfo | null;
 }
 
-export interface IDndSystemContext {
-  dndSystemState: IDndSystemState;
-  dndResizeHandler: (viewModal: IDndViewModel, resizeInfo: IResizeInfo) => void;
+export interface IRDndSystemContext {
+  rDndSystemState: IRDndSystemState;
+  dndResizeHandler: (viewModal: IRDndViewModel, resizeInfo: IResizeInfo) => void;
   dndDropHandler: (dropInfo: IDropInfo) => void;
   dndAddCanDropFilter: (canDropFilter: ICanDropFilter) => void;
   dndClearDropFilters: () => void;
   dndFindParentViewModal: (
-    childViewModal: IDndViewModel | undefined | null,
-    fromViewModals: IDndViewModel[]
-  ) => IDndViewModel | null;
+    childViewModal: IRDndViewModel | undefined | null,
+    fromViewModals: IRDndViewModel[]
+  ) => IRDndViewModel | null;
   dndAddViewModal: (
-    viewModalToAdd: IDndViewModel,
-    parentViewModal?: IDndViewModel
+    viewModalToAdd: IRDndViewModel,
+    parentViewModal?: IRDndViewModel
   ) => boolean;
-  dndRemoveViewModal: (viewModalToRemove: IDndViewModel) => boolean;
-  dndUpdateViewModal: (viewModalToUpdate: IDndViewModel) => boolean;
+  dndRemoveViewModal: (viewModalToRemove: IRDndViewModel) => boolean;
+  dndUpdateViewModal: (viewModalToUpdate: IRDndViewModel) => boolean;
   dndMoveViewModal: (
-    viewModalToMove: IDndViewModel,
-    newParentViewModal?: IDndViewModel
+    viewModalToMove: IRDndViewModel,
+    newParentViewModal?: IRDndViewModel
   ) => boolean;
   dndSetDropInfo: (dropInfo: IDropInfo | null) => void;
-  dndAddDraggingViewModal: (viewModal: IDndViewModel, append?: boolean) => void;
-  dndRemoveDraggingViewModal: (viewModal: IDndViewModel) => void;
+  dndAddDraggingViewModal: (viewModal: IRDndViewModel, append?: boolean) => void;
+  dndRemoveDraggingViewModal: (viewModal: IRDndViewModel) => void;
   dndRemoveAllDraggingViewModals: () => void;
-  dndSetDropTargetViewModal: (viewModal: IDndViewModel | null) => void;
+  dndSetDropTargetViewModal: (viewModal: IRDndViewModel | null) => void;
 }
 
 const searchToAdd = (
-  viewModalArray: IDndViewModel[],
-  viewModalToAdd: IDndViewModel,
-  parentViewModal?: IDndViewModel,
+  viewModalArray: IRDndViewModel[],
+  viewModalToAdd: IRDndViewModel,
+  parentViewModal?: IRDndViewModel,
   added: Boolean = false
 ) => {
   if (!added) {
@@ -71,8 +71,8 @@ const searchToAdd = (
 };
 
 const searchToRemove = (
-  viewModalArray: IDndViewModel[],
-  viewModalToRemove: IDndViewModel,
+  viewModalArray: IRDndViewModel[],
+  viewModalToRemove: IRDndViewModel,
   removed: Boolean = false
 ) => {
   if (!removed) {
@@ -98,8 +98,8 @@ const searchToRemove = (
 };
 
 const searchToUpdate = (
-  viewModalArray: IDndViewModel[],
-  viewModalToUpdate: IDndViewModel,
+  viewModalArray: IRDndViewModel[],
+  viewModalToUpdate: IRDndViewModel,
   updated: Boolean = false
 ) => {
   if (!updated) {
@@ -124,8 +124,8 @@ const searchToUpdate = (
   return updated;
 };
 
-export const useInitialDndSystemContext: () => IDndSystemContext = () => {
-  const [dndSystemState, setDndSystemState] = useState<IDndSystemState>({
+export const useInitialRDndSystemContext: () => IRDndSystemContext = () => {
+  const [rDndSystemState, setDndSystemState] = useState<IRDndSystemState>({
     viewModalStructure: [],
     draggingViewModels: [],
     dropTargetViewModal: null,
@@ -133,15 +133,15 @@ export const useInitialDndSystemContext: () => IDndSystemContext = () => {
   });
 
   const utilViewModalCanDropFilter = (
-    viewModals: IDndViewModel[],
-    toViewModal: IDndViewModel | null | undefined
+    viewModals: IRDndViewModel[],
+    toViewModal: IRDndViewModel | null | undefined
   ) => {
     if (toViewModal === undefined || toViewModal === null) {
       return true;
     } else {
       const isInvalidTarget = (
-        viewModals: IDndViewModel[],
-        toViewModal: IDndViewModel
+        viewModals: IRDndViewModel[],
+        toViewModal: IRDndViewModel
       ) => {
         return viewModals.reduce((accumulator, viewModal) => {
           if (accumulator) {
@@ -166,13 +166,13 @@ export const useInitialDndSystemContext: () => IDndSystemContext = () => {
   };
 
   const dndAddViewModal = (
-    viewModalToAdd: IDndViewModel,
-    parentViewModal?: IDndViewModel
+    viewModalToAdd: IRDndViewModel,
+    parentViewModal?: IRDndViewModel
   ) => {
-    const viewModalArray = [...dndSystemState.viewModalStructure];
+    const viewModalArray = [...rDndSystemState.viewModalStructure];
     if (searchToAdd(viewModalArray, viewModalToAdd, parentViewModal, false)) {
       setDndSystemState({
-        ...dndSystemState,
+        ...rDndSystemState,
         viewModalStructure: viewModalArray,
       });
       return true;
@@ -180,11 +180,11 @@ export const useInitialDndSystemContext: () => IDndSystemContext = () => {
     return false;
   };
 
-  const dndUpdateViewModal = (viewModalToUpdate: IDndViewModel) => {
-    const viewModalArray = [...dndSystemState.viewModalStructure];
+  const dndUpdateViewModal = (viewModalToUpdate: IRDndViewModel) => {
+    const viewModalArray = [...rDndSystemState.viewModalStructure];
     if (searchToUpdate(viewModalArray, viewModalToUpdate, false)) {
       setDndSystemState({
-        ...dndSystemState,
+        ...rDndSystemState,
         viewModalStructure: viewModalArray,
       });
       return true;
@@ -192,11 +192,11 @@ export const useInitialDndSystemContext: () => IDndSystemContext = () => {
     return false;
   };
 
-  const dndRemoveViewModal = (viewModalToRemove: IDndViewModel) => {
-    const viewModalArray = [...dndSystemState.viewModalStructure];
+  const dndRemoveViewModal = (viewModalToRemove: IRDndViewModel) => {
+    const viewModalArray = [...rDndSystemState.viewModalStructure];
     if (searchToRemove(viewModalArray, viewModalToRemove, false)) {
       setDndSystemState({
-        ...dndSystemState,
+        ...rDndSystemState,
         viewModalStructure: viewModalArray,
       });
       return true;
@@ -205,10 +205,10 @@ export const useInitialDndSystemContext: () => IDndSystemContext = () => {
   };
 
   const dndMoveViewModal = (
-    viewModalToMove: IDndViewModel,
-    newParentViewModal?: IDndViewModel
+    viewModalToMove: IRDndViewModel,
+    newParentViewModal?: IRDndViewModel
   ) => {
-    const viewModalArray = [...dndSystemState.viewModalStructure];
+    const viewModalArray = [...rDndSystemState.viewModalStructure];
     const removed = searchToRemove(viewModalArray, viewModalToMove, false);
     const added = searchToAdd(
       viewModalArray,
@@ -218,7 +218,7 @@ export const useInitialDndSystemContext: () => IDndSystemContext = () => {
     );
     if (removed || added) {
       setDndSystemState({
-        ...dndSystemState,
+        ...rDndSystemState,
         viewModalStructure: viewModalArray,
       });
       return true;
@@ -229,7 +229,7 @@ export const useInitialDndSystemContext: () => IDndSystemContext = () => {
   const canDropFilters: ICanDropFilter[] = [utilViewModalCanDropFilter];
 
   const dndResizeHandler = (
-    viewModal: IDndViewModel,
+    viewModal: IRDndViewModel,
     resizeInfo: IResizeInfo
   ) => {
     const { width, height, resizeDirection, dx = 0, dy = 0 } = resizeInfo;
@@ -305,13 +305,13 @@ export const useInitialDndSystemContext: () => IDndSystemContext = () => {
   };
 
   const dndFindParentViewModal = (
-    childViewModal: IDndViewModel | undefined | null,
-    fromViewModals: IDndViewModel[]
+    childViewModal: IRDndViewModel | undefined | null,
+    fromViewModals: IRDndViewModel[]
   ) => {
     if (childViewModal === undefined || childViewModal === null) {
       return null;
     }
-    return fromViewModals.reduce<IDndViewModel | null>(
+    return fromViewModals.reduce<IRDndViewModel | null>(
       (accumulator, viewModal) => {
         if (Array.isArray(viewModal.children)) {
           viewModal.children.map((child) => {
@@ -335,7 +335,7 @@ export const useInitialDndSystemContext: () => IDndSystemContext = () => {
   };
 
   return {
-    dndSystemState,
+    rDndSystemState,
     dndResizeHandler,
     dndDropHandler,
     dndAddCanDropFilter: (canDropFilter: ICanDropFilter) =>
@@ -351,14 +351,14 @@ export const useInitialDndSystemContext: () => IDndSystemContext = () => {
         ...state,
         dropInfo: dropInfo,
       })),
-    dndAddDraggingViewModal: (viewModal: IDndViewModel, append = false) =>
+    dndAddDraggingViewModal: (viewModal: IRDndViewModel, append = false) =>
       setDndSystemState((state) => ({
         ...state,
         draggingViewModels: append
           ? [...state.draggingViewModels, viewModal]
           : [viewModal],
       })),
-    dndRemoveDraggingViewModal: (viewModal: IDndViewModel) =>
+    dndRemoveDraggingViewModal: (viewModal: IRDndViewModel) =>
       setDndSystemState((state) => ({
         ...state,
         draggingViewModels: state.draggingViewModels.filter(
@@ -367,7 +367,7 @@ export const useInitialDndSystemContext: () => IDndSystemContext = () => {
       })),
     dndRemoveAllDraggingViewModals: () =>
       setDndSystemState((state) => ({ ...state, draggingViewModels: [] })),
-    dndSetDropTargetViewModal: (viewModal: IDndViewModel | null) =>
+    dndSetDropTargetViewModal: (viewModal: IRDndViewModel | null) =>
       setDndSystemState((state) => ({
         ...state,
         dropTargetViewModal: viewModal,
@@ -375,6 +375,6 @@ export const useInitialDndSystemContext: () => IDndSystemContext = () => {
   };
 };
 
-export const DndSystemContext = React.createContext<IDndSystemContext>(
+export const RDndSystemContext = React.createContext<IRDndSystemContext>(
   {} as any
 );
